@@ -1,0 +1,7 @@
+{
+  "id": "demo",
+  "title": "演示书",
+  "level": "IELTS",
+  "density": { "min": 1, "max": 15 },
+  "chapters": [{ "id": "001", "title": "第一章 雨夜" }]
+}

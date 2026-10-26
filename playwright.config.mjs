@@ -1,6 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
-const port = 4173;
+// A separate port from `npm run serve`, so a dev server is never reused.
+const port = 4174;
 
 export default defineConfig({
   testDir: 'e2e',
@@ -15,6 +16,7 @@ export default defineConfig({
   webServer: {
     command: `node scripts/serve.mjs ${port}`,
     url: `http://127.0.0.1:${port}/`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
+    env: { LIBRARY_DIR: 'test/fixtures/library' },
   },
 });

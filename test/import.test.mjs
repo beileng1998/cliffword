@@ -112,3 +112,16 @@ test('loadBook keeps the source text unchanged', async () => {
   const text = chapters[0].paragraphs[0].segments.map((s) => (typeof s === 'string' ? s : s.gloss)).join('');
   assert.equal(text, '苹果和香蕉。');
 });
+
+test('import keeps library/index.json listing every book', async () => {
+  const dir = await tmp();
+  const lib = join(dir, 'library');
+  for (const id of ['b-two', 'a-one']) {
+    const file = join(dir, `${id}.txt`);
+    await writeFile(file, '第一章 甲\n一。\n');
+    await importText(file, { id, libraryDir: lib });
+  }
+  const index = JSON.parse(await readFile(join(lib, 'index.json'), 'utf8'));
+  assert.deepEqual(index.books.map((b) => b.id), ['a-one', 'b-two']);
+  assert.equal(index.books[0].chapters, 1);
+});

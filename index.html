@@ -3,12 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>cliffword</title>
+  <link rel="stylesheet" href="app/style.css">
+  <script type="module" src="app/main.js"></script>
 </head>
 <body>
-  <main>
-    <h1>cliffword</h1>
-    <p>Reader not built yet. See docs/SCOPE.md.</p>
-  </main>
+  <div id="app"><p class="page">加载中…</p></div>
+  <dialog id="word-card" aria-label="词卡"></dialog>
+  <dialog id="answer" aria-label="作答"></dialog>
+  <noscript><p class="page">cliffword 需要启用 JavaScript。</p></noscript>
 </body>
 </html>

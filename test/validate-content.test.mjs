@@ -82,3 +82,10 @@ test('every story in content/ passes the validator', async () => {
     assert.deepEqual(errors, [], `${dir} has content errors`);
   }
 });
+
+test('content/index.json lists exactly the story folders', async () => {
+  const { readdir, readFile } = await import('node:fs/promises');
+  const dirs = (await readdir(contentDir, { withFileTypes: true })).filter((e) => e.isDirectory()).map((e) => e.name).sort();
+  const index = JSON.parse(await readFile(`${contentDir}/index.json`, 'utf8'));
+  assert.deepEqual([...index.stories].sort(), dirs);
+});

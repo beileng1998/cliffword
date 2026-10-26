@@ -3,7 +3,7 @@
 **读一个停不下来的中文故事，顺手记住里面的英文单词。**
 Serialized Chinese stories with English target words woven in, plus recall exercises and next-day review. A static web app: no accounts, no backend, no AI at runtime.
 
-> **Status: pre-alpha.** The content format, validator and first story (《画皮》, a retelling of the 聊斋志异 tale) exist. The reader doesn't yet. See [docs/SCOPE.md](docs/SCOPE.md) for what v0.1 will do and the check that proves it.
+> **Status: pre-alpha.** The reader works: library (built-in stories and 我的书库), chapter reader, word cards with browser pronunciation, and four modes (阅读, 英→中, 中→英, 迁移). Next-day review and progress backup are next. The first story is 《画皮》, a retelling of the 聊斋志异 tale. See [docs/SCOPE.md](docs/SCOPE.md) for what v0.1 will do and the check that proves it.
 
 ## Why
 
@@ -49,7 +49,7 @@ Then, in Codex or Claude Code opened in this repo, ask: *"Use cliffword-annotate
 
 ## Develop
 
-Requires Node 20 or later.
+Requires Node 20 or later. To read locally, run `npm run serve` and open http://127.0.0.1:4173.
 
 ```bash
 npm install
