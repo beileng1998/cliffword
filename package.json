@@ -14,7 +14,8 @@
     "validate:library": "node scripts/validate-content.mjs library --library",
     "import": "node scripts/import-text.mjs",
     "serve": "node scripts/serve.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "words": "node scripts/words.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1"

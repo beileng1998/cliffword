@@ -5,6 +5,17 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { applyAnnotations, splitParagraphs } from './lib/annotate.mjs';
+import { createWordlist } from './lib/wordlist.mjs';
+
+const WORDLIST_PATH = fileURLToPath(new URL('../data/ielts.json', import.meta.url));
+let defaultWordlist;
+
+export async function loadWordlist(path = WORDLIST_PATH) {
+  if (path === WORDLIST_PATH && defaultWordlist) return defaultWordlist;
+  const list = createWordlist(await readJson(path));
+  if (path === WORDLIST_PATH) defaultWordlist = list;
+  return list;
+}
 
 const DEFAULTS = { minWords: 30, maxWords: 50, minOccurrences: 2, requireHook: true, perChapter: null };
 // Imported books: no total word range and no hook markup, but a per-chapter density.
@@ -113,10 +124,44 @@ export async function loadBook(dir) {
   return { story: book, vocab, chapters, errors };
 }
 
+// Imported books at a known level must use words from that level's list,
+// in a real form of the word, with a meaning the dictionary agrees with
+// (or a glossNote saying why this sentence needs a different one).
+export function checkAgainstWordlist({ vocab, chapters }, list) {
+  const errors = [];
+  const lemmas = new Map((vocab.words ?? []).map((w) => [w.id, w.lemma]));
+  for (const w of vocab.words ?? []) {
+    if (w.lemma && !list.has(w.lemma)) errors.push(`vocab "${w.id}": "${w.lemma}" is not on the IELTS word list`);
+  }
+  for (const chapter of chapters) {
+    chapter.paragraphs.forEach((paragraph, p) => {
+      for (const seg of paragraph.segments) {
+        if (typeof seg === 'string') continue;
+        const lemma = lemmas.get(seg.w);
+        if (!lemma || !list.has(lemma)) continue;
+        const where = `chapter "${chapter.id}" paragraph ${p + 1}: "${seg.w}"`;
+        if (!list.isFormOf(seg.form, lemma)) errors.push(`${where} form "${seg.form}" is not a form of "${lemma}"`);
+        if (!seg.glossNote && !list.glossMatches(lemma, seg.gloss)) {
+          const known = list.terms(lemma).slice(0, 6).join('、');
+          errors.push(`${where} gloss "${seg.gloss}" doesn't match the dictionary (${known}). Fix the gloss, or add "glossNote" explaining the meaning in this sentence`);
+        }
+      }
+    });
+  }
+  return errors;
+}
+
 export async function validateBook(dir, options = {}) {
   const data = await loadBook(dir);
   const perChapter = options.perChapter ?? data.story.density ?? BOOK_DEFAULTS.perChapter;
-  return [...data.errors, ...validateStoryData(data, { ...BOOK_DEFAULTS, ...options, perChapter })];
+  const errors = [...data.errors, ...validateStoryData(data, { ...BOOK_DEFAULTS, ...options, perChapter })];
+  // options.wordlist: a list from createWordlist, or false to skip (tests).
+  if (options.wordlist !== false && String(data.story.level ?? 'IELTS').toUpperCase() === 'IELTS') {
+    const list = options.wordlist ?? await loadWordlist().catch(() => null);
+    if (!list) errors.push('data/ielts.json is missing or unreadable, so words and glosses could not be checked');
+    else errors.push(...checkAgainstWordlist(data, list));
+  }
+  return errors;
 }
 
 export async function validateAll(contentDir, options, { library = false } = {}) {
@@ -141,8 +186,13 @@ export async function validateAll(contentDir, options, { library = false } = {})
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   const library = args.includes('--library');
-  const contentDir = resolve(args.find((a) => !a.startsWith('--')) ?? (library ? 'library' : 'content'));
-  const results = await validateAll(contentDir, {}, { library });
+  const paths = args.filter((a) => !a.startsWith('--'));
+  const contentDir = resolve(paths.at(-1) ?? (library ? 'library' : 'content'));
+  // A single imported book (a folder with book.json) can be checked on its own.
+  const single = library && await readFile(join(contentDir, 'book.json')).then(() => true, () => false);
+  const results = single
+    ? [{ dir: contentDir, errors: await validateBook(contentDir).catch((err) => [`could not load: ${err.message}`]) }]
+    : await validateAll(contentDir, {}, { library });
   if (!results.length) {
     console.error(`No stories found in ${contentDir}`);
     process.exit(1);

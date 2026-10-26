@@ -95,14 +95,14 @@ const banana = { w: 'banana-n', anchor: '香蕉', form: 'banana', gloss: '香蕉
 
 test('validates an annotated book with its own density limits', async () => {
   const bookDir = await annotatedBook([[apple, banana], [apple, banana]]);
-  assert.deepEqual(await validateBook(bookDir, { perChapter: { min: 1, max: 2 } }), []);
-  const tooFew = await validateBook(bookDir);
+  assert.deepEqual(await validateBook(bookDir, { perChapter: { min: 1, max: 2 }, wordlist: false }), []);
+  const tooFew = await validateBook(bookDir, { wordlist: false });
   assert.ok(tooFew.some((e) => /chapter "001" uses 2 target words, expected 8–15/.test(e)));
 });
 
 test('reports chapters that are not annotated yet', async () => {
   const bookDir = await annotatedBook([[apple, banana]]);
-  const errors = await validateBook(bookDir, { perChapter: { min: 1, max: 2 } });
+  const errors = await validateBook(bookDir, { perChapter: { min: 1, max: 2 }, wordlist: false });
   assert.ok(errors.some((e) => /chapter "002" is not annotated yet/.test(e)));
 });
 
@@ -124,4 +124,27 @@ test('import keeps library/index.json listing every book', async () => {
   const index = JSON.parse(await readFile(join(lib, 'index.json'), 'utf8'));
   assert.deepEqual(index.books.map((b) => b.id), ['a-one', 'b-two']);
   assert.equal(index.books[0].chapters, 1);
+});
+
+test('imported books must use IELTS words, real forms and dictionary-backed glosses', async () => {
+  const { createWordlist } = await import('../scripts/lib/wordlist.mjs');
+  const list = createWordlist({ words: {
+    apple: { ipa: '/ˈæpl/', zh: ['n. 苹果'], forms: ['apples'] },
+    banana: { ipa: '/bəˈnɑːnə/', zh: ['n. 香蕉'], forms: ['bananas'] },
+  } });
+  const opts = { perChapter: { min: 1, max: 2 }, wordlist: list };
+  const ok = await annotatedBook([[apple, banana], [apple, banana]]);
+  assert.deepEqual(await validateBook(ok, opts), []);
+
+  const badGloss = await annotatedBook([[{ ...apple, gloss: '梨' }, banana], [apple, banana]]);
+  assert.ok((await validateBook(badGloss, opts)).some((e) => /gloss "梨" doesn't match the dictionary \(苹果\)/.test(e)));
+
+  const noted = await annotatedBook([[{ ...apple, gloss: '梨', glossNote: 'test: deliberate' }, banana], [apple, banana]]);
+  assert.deepEqual(await validateBook(noted, opts), []);
+
+  const badForm = await annotatedBook([[{ ...apple, form: 'appled' }, banana], [apple, banana]]);
+  assert.ok((await validateBook(badForm, opts)).some((e) => /form "appled" is not a form of "apple"/.test(e)));
+
+  const offList = createWordlist({ words: { apple: { ipa: '', zh: ['n. 苹果'], forms: [] } } });
+  assert.ok((await validateBook(ok, { ...opts, wordlist: offList })).some((e) => /"banana" is not on the IELTS word list/.test(e)));
 });
