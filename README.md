@@ -3,7 +3,7 @@
 **读一个停不下来的中文故事，顺手记住里面的英文单词。**
 Serialized Chinese stories with English target words woven in, plus recall exercises and next-day review. A static web app: no accounts, no backend, no AI at runtime.
 
-> **Status: pre-alpha.** The reader works: library (built-in stories and 我的书库), chapter reader, word cards with browser pronunciation, and four modes (阅读, 英→中, 中→英, 迁移). Next-day review and progress backup are next. The first story is 《画皮》, a retelling of the 聊斋志异 tale. See [docs/SCOPE.md](docs/SCOPE.md) for what v0.1 will do and the check that proves it.
+> **Status: pre-alpha.** The reader works: library (built-in stories and 我的书库), chapter reader, word cards with browser pronunciation, four modes (阅读, 英→中, 中→英, 迁移), next-day review, progress backup, and a local reading summary. All seven v0.1 acceptance steps pass. The first story is 《画皮》, a retelling of the 聊斋志异 tale. See [docs/SCOPE.md](docs/SCOPE.md) for what v0.1 will do and the check that proves it.
 
 ## Why
 

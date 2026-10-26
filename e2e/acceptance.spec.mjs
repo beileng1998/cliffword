@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { test, expect } from '@playwright/test';
 
 const wordCard = (page) => page.locator('#word-card');
@@ -88,8 +89,57 @@ test('我的书库 shows an imported book with its own annotations', async ({ pa
   await expect(page.locator('.para').nth(1)).toContainText('上没有名字，只有一行字：别');
 });
 
-// Steps 6–7 come with review and backup.
-test.fixme('errors are due for review the next day, and export/import restores state', async () => {
-  // 6. Advance the clock one day: errors are due in review.
+// v0.1 acceptance flow, steps 6–7.
+test('errors and saved words are due the next day, and export/import restores state', async ({ page }) => {
+  await page.clock.install({ time: new Date('2026-10-25T10:00:00') });
+
+  // One wrong answer and one saved word on day 1.
+  await page.goto('/#/read/builtin/huapi/01?mode=en2zh');
+  await page.getByRole('button', { name: '写出 scholar 在这句里的意思' }).first().click();
+  await submitAnswer(page, '学者');
+  await answer(page).getByRole('button', { name: '知道了' }).click();
+  await page.goto('/#/read/builtin/huapi/01');
+  await page.getByRole('button', { name: /^dawn，天刚亮/ }).first().click();
+  await wordCard(page).getByRole('button', { name: /收藏/ }).click();
+  await wordCard(page).getByRole('button', { name: '关闭' }).click();
+
+  // Same day: nothing due yet.
+  await page.goto('/');
+  await expect(page.getByText('今天没有要复习的单词。还有 2 个单词会在之后几天复习。')).toBeVisible();
+
+  // 6. Next morning both are due; review them.
+  await page.clock.setSystemTime(new Date('2026-10-26T09:00:00'));
+  await page.reload();
+  await page.getByRole('link', { name: /今日复习 · 2 个单词/ }).click();
+  const answers = { scholar: '书生', dawn: '天刚亮' };
+  for (let n = 0; n < 2; n += 1) {
+    const shown = (await page.locator('.review-card h1').textContent()).trim();
+    await expect(page.locator('.review-card .context mark')).toHaveText(shown);
+    await page.getByLabel('中文意思').fill(answers[shown]);
+    await page.getByRole('button', { name: '提交' }).click();
+    await expect(page.getByText('✓ 正确')).toBeVisible();
+    await page.getByRole('button', { name: '下一个' }).click();
+  }
+  await expect(page.getByRole('heading', { name: '今天的复习完成了' })).toBeVisible();
+  await page.goto('/');
+  await expect(page.getByRole('link', { name: /今日复习/ })).toHaveCount(0);
+  await expect(page.locator('.stats div', { hasText: '阅读天数' }).locator('dd')).toHaveText('2');
+  await expect(page.locator('.stats div', { hasText: '答题正确率' }).locator('dd')).toHaveText('67%（2/3）');
+
   // 7. Export, clear storage, import: the state matches.
+  const download = page.waitForEvent('download');
+  await page.getByRole('button', { name: '导出进度' }).click();
+  const file = await (await download).path();
+  const json = await readFile(file, 'utf8');
+  expect(JSON.parse(json).app).toBe('cliffword');
+  expect(json).not.toContain('太原有个');
+
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await expect(page.getByText('还没有收藏单词')).toBeVisible();
+  await page.locator('#import-file').setInputFiles(file);
+  await expect(page.getByText('已导入备份。')).toBeVisible();
+  await expect(page.getByRole('link', { name: '已收藏 1 个单词 →' })).toBeVisible();
+  await expect(page.getByText('今天没有要复习的单词。还有 2 个单词会在之后几天复习。')).toBeVisible();
+  await expect(page.locator('.stats div', { hasText: '答题正确率' }).locator('dd')).toHaveText('67%（2/3）');
 });

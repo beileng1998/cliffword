@@ -48,6 +48,7 @@ function parseRoute() {
     return { view: 'read', source: parts[1], id: parts[2], chapter: parts[3] ?? null, mode: params.get('mode') ?? 'read' };
   }
   if (parts[0] === 'saved') return { view: 'saved' };
+  if (parts[0] === 'review') return { view: 'review' };
   return { view: 'library' };
 }
 
@@ -63,6 +64,7 @@ async function render() {
   try {
     if (route.view === 'read') await renderReader(route);
     else if (route.view === 'saved') renderSaved();
+    else if (route.view === 'review') await renderReview();
     else await renderLibrary();
   } catch (err) {
     app.replaceChildren(h('main', { class: 'page' },
@@ -97,10 +99,19 @@ async function renderLibrary() {
       ? h('ul', { class: 'books' }, library.map((b) => bookCard(b, `${b.chapters} 章 · 本机`)))
       : h('p', { class: 'notice', text: '还没有导入的书。运行 npm run import -- 你的书.txt 导入一本。' });
 
+  const sum = store.summary();
+  const reviewBanner = sum.due
+    ? h('a', { class: 'review-banner', href: '#/review' },
+      h('span', { class: 'review-count', text: `今日复习 · ${sum.due} 个单词` }), h('span', { text: '开始 →' }))
+    : sum.upcoming
+      ? h('p', { class: 'fineprint', text: `今天没有要复习的单词。还有 ${sum.upcoming} 个单词会在之后几天复习。` })
+      : null;
+
   app.replaceChildren(h('main', { class: 'page' },
     h('header', { class: 'masthead' },
       h('h1', { text: 'cliffword' }),
       h('p', { class: 'tagline', text: '读一个停不下来的故事，顺手记住里面的英文单词。' })),
+    reviewBanner,
     h('section', { 'aria-labelledby': 'h-builtin' },
       h('h2', { id: 'h-builtin', text: '内置故事' }),
       h('ul', { class: 'books' }, builtIn.map((b) => bookCard(b, `${b.chapters} 章 · ${b.words} 个单词`))),
@@ -111,7 +122,160 @@ async function renderLibrary() {
     h('section', { 'aria-labelledby': 'h-saved' },
       h('h2', { id: 'h-saved', text: '生词本' }),
       h('p', {}, h('a', { href: '#/saved', text: savedCount ? `已收藏 ${savedCount} 个单词 →` : '还没有收藏单词' }))),
+    h('section', { 'aria-labelledby': 'h-stats' },
+      h('h2', { id: 'h-stats', text: '学习记录' }),
+      h('dl', { class: 'stats' },
+        stat('阅读天数', sum.days),
+        stat('读完章节', sum.chapters),
+        stat('主动点“下一章”', `${sum.nextChapter} 次`),
+        stat('答题正确率', sum.answered ? `${Math.round((sum.correct / sum.answered) * 100)}%（${sum.correct}/${sum.answered}）` : '—'),
+        stat('待复习', sum.due)),
+      h('p', { class: 'fineprint', text: '这些记录只保存在这个浏览器里，不会发送到任何地方。' })),
+    backupSection(),
     !store.persistent && h('p', { class: 'notice', text: '浏览器不允许本地保存，进度只在本次打开期间有效。' })));
+}
+
+function stat(label, value) {
+  return h('div', {}, h('dt', { text: label }), h('dd', { text: String(value) }));
+}
+
+function backupSection() {
+  const status = h('p', { class: 'fineprint', role: 'status' });
+  const file = h('input', { type: 'file', id: 'import-file', accept: 'application/json,.json', class: 'visually-hidden' });
+  file.addEventListener('change', async () => {
+    const chosen = file.files?.[0];
+    file.value = '';
+    if (!chosen) return;
+    try {
+      const text = await chosen.text();
+      if (!store.isEmpty() && !confirm('导入会替换这个浏览器里现在的进度。继续吗？')) return;
+      store.importJSON(text);
+      await renderLibrary();
+      document.querySelector('#backup-status').textContent = '已导入备份。';
+    } catch (err) {
+      status.textContent = err.message;
+    }
+  });
+
+  const exportBtn = h('button', { type: 'button', class: 'small', text: '导出进度' });
+  exportBtn.addEventListener('click', () => {
+    const blob = new Blob([store.exportJSON()], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const d = new Date();
+    const stamp = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const a = h('a', { href: url, download: `cliffword-progress-${stamp}.json` });
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    status.textContent = '已导出。';
+  });
+
+  status.id = 'backup-status';
+  return h('section', { 'aria-labelledby': 'h-backup' },
+    h('h2', { id: 'h-backup', text: '备份' }),
+    h('div', { class: 'backup-actions' },
+      exportBtn,
+      h('label', { for: 'import-file', class: 'small file-label', text: '导入进度' }),
+      file),
+    h('p', { class: 'fineprint', text: '备份文件只包含进度、收藏的单词和答题记录，不包含任何书的正文。' }),
+    status);
+}
+
+/* ---------- Review ---------- */
+
+function parseWordKey(key) {
+  const parts = key.split('/');
+  return { source: parts[0], id: parts.slice(1, -1).join('/'), w: parts.at(-1) };
+}
+
+async function reviewContext(item) {
+  const { source, id } = parseWordKey(item.key);
+  try {
+    const book = await loadBook(source, id);
+    const ref = book.chapters.find((c) => c.id === item.chapter);
+    const paragraph = ref && (await ref.load()).paragraphs[item.p];
+    if (!paragraph || typeof paragraph.segments[item.i] === 'string') return null;
+    return h('p', { class: 'context' }, paragraph.segments.map((seg, i) => {
+      if (typeof seg === 'string') return seg;
+      if (i !== item.i) return seg.gloss;
+      return item.direction === 'en2zh'
+        ? h('mark', { lang: 'en', text: seg.form })
+        : h('mark', {}, `（${seg.gloss}）`, h('span', { lang: 'en', text: hintFor(seg.form) }));
+    }));
+  } catch {
+    return null;
+  }
+}
+
+async function renderReview() {
+  document.title = '复习 · cliffword';
+  const queue = store.due();
+  let done = 0;
+  let right = 0;
+
+  const shell = h('main', { class: 'page review' });
+  app.replaceChildren(shell);
+
+  async function show(index) {
+    const item = queue[index];
+    if (!item) {
+      shell.replaceChildren(
+        h('nav', { class: 'crumbs' }, h('a', { href: '#/', text: '← 书库' })),
+        h('h1', { text: queue.length ? '今天的复习完成了' : '今天没有要复习的单词' }),
+        queue.length && h('p', { text: `复习了 ${done} 个单词，答对 ${right} 个。答对的单词会隔几天再出现，答错的明天再来。` }),
+        h('p', {}, h('a', { href: '#/', class: 'primary-link', text: '返回书库' })));
+      return;
+    }
+
+    const meaning = item.direction === 'en2zh';
+    const input = h('input', {
+      id: 'review-input', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false',
+      lang: meaning ? 'zh-CN' : 'en', required: true,
+    });
+    const feedback = h('div', { class: 'feedback', role: 'status' });
+    const submit = h('button', { type: 'submit', class: 'primary', text: '提交' });
+    const next = (correct, given) => {
+      store.reviewResult(item.key, correct, item.direction, given);
+      done += 1;
+      if (correct) right += 1;
+      show(index + 1);
+    };
+
+    const form = h('form', { class: 'sheet review-card' },
+      h('p', { class: 'fineprint', text: `${index + 1} / ${queue.length}${item.bookTitle ? ` · 《${item.bookTitle}》` : ''}` }),
+      h('h1', { class: meaning ? 'lemma' : 'review-gloss', lang: meaning ? 'en' : 'zh-CN', text: meaning ? item.form : item.gloss }),
+      meaning && ttsSupported && h('button', { type: 'button', class: 'icon', 'aria-label': `朗读 ${item.form}`, onclick: () => speak(item.form), text: '🔊' }),
+      !meaning && h('p', { class: 'hint', lang: 'en', text: hintFor(item.form) }),
+      await reviewContext(item),
+      h('label', { for: 'review-input', text: meaning ? '中文意思' : `英文（${item.form.length} 个字母）` }),
+      input,
+      feedback,
+      h('div', { class: 'sheet-actions' }, submit));
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const given = input.value;
+      const correct = meaning ? checkMeaning(given, item) : checkSpelling(given, item);
+      input.readOnly = true;
+      submit.remove();
+      if (correct) {
+        feedback.replaceChildren(h('p', { class: 'ok', text: '✓ 正确' }), h('button', { type: 'button', class: 'primary', onclick: () => next(true, given), text: '下一个' }));
+        if (ttsSupported) speak(item.form);
+      } else {
+        feedback.replaceChildren(
+          h('p', { class: 'bad' }, '✗ 参考答案：', h('strong', { lang: meaning ? 'zh-CN' : 'en', text: meaning ? item.gloss : item.form })),
+          meaning && h('button', { type: 'button', class: 'text-btn', onclick: () => next(true, given), text: '我的答案意思也对' }),
+          h('button', { type: 'button', class: 'primary', onclick: () => next(false, given), text: '下一个' }));
+      }
+      feedback.querySelector('button.primary')?.focus();
+    });
+
+    shell.replaceChildren(h('nav', { class: 'crumbs' }, h('a', { href: '#/', text: '← 书库' })), form);
+    input.focus();
+  }
+
+  await show(0);
 }
 
 /* ---------- Saved words ---------- */
@@ -170,8 +334,8 @@ async function renderReader(route) {
       h('nav', { class: 'chapter-nav', 'aria-label': '章节' },
         prev ? h('a', { class: 'prev', href: readHref(book.source, book.id, prev.id, mode), text: `← ${prev.title}` }) : h('span'),
         next
-          ? h('a', { class: 'next', href: readHref(book.source, book.id, next.id, mode), onclick: () => store.noteNextChapter(bookKey(book)), text: `下一章：${next.title} →` })
-          : h('a', { class: 'next', href: '#/', text: '全书完 · 返回书库' }))));
+          ? h('a', { class: 'next', href: readHref(book.source, book.id, next.id, mode), onclick: () => { store.noteNextChapter(bookKey(book)); store.markComplete(bookKey(book), ref.id); }, text: `下一章：${next.title} →` })
+          : h('a', { class: 'next', href: '#/', onclick: () => store.markComplete(bookKey(book), ref.id), text: '全书完 · 返回书库' }))));
 
   const paragraphs = [...app.querySelectorAll('.para')];
   if (restoring && paragraphs[pos.paragraph]) paragraphs[pos.paragraph].scrollIntoView({ block: 'start' });
@@ -184,6 +348,8 @@ async function renderReader(route) {
       const top = app.querySelector('.topbar')?.getBoundingClientRect().bottom ?? 0;
       const index = paragraphs.findIndex((p) => p.getBoundingClientRect().bottom > top + 8);
       store.setPosition(bookKey(book), { chapter: ref.id, chapterNumber: chapterIndex + 1, paragraph: Math.max(0, index) });
+      const last = paragraphs.at(-1);
+      if (last && last.getBoundingClientRect().bottom <= innerHeight) store.markComplete(bookKey(book), ref.id);
     }, 250);
   };
   addEventListener('scroll', scrollHandler, { passive: true });
@@ -210,7 +376,7 @@ function renderPassage(book, chapter, mode) {
         return;
       }
       const occKey = `${bookKey(book)}/${chapter.id}/${p}/${i}`;
-      const chip = wordChip({ book, chapter, paragraph, index: i, seg, occKey, mode });
+      const chip = wordChip({ book, chapter, paragraph, p, index: i, seg, occKey, mode });
       const next = paragraph.segments[i + 1];
       carry = typeof next === 'string' ? (LEADING_PUNCT.exec(next)?.[0] ?? '') : '';
       nodes.push(carry ? h('span', { class: 'nobr' }, chip, carry) : chip);
@@ -254,7 +420,7 @@ function wordChip(ctx) {
 
 /* ---------- Word card ---------- */
 
-function openWordCard({ book, paragraph, index, seg }) {
+function openWordCard({ book, chapter, paragraph, p, index, seg }) {
   const word = book.vocab.get(seg.w) ?? { lemma: seg.form };
   const key = wordKey(book, seg.w);
   const errors = store.errors()[key]?.count ?? 0;
@@ -263,7 +429,7 @@ function openWordCard({ book, paragraph, index, seg }) {
     text: store.isSaved(key) ? '★ 已收藏' : '☆ 收藏',
   });
   saveBtn.addEventListener('click', () => {
-    const saved = store.toggleSaved(key, { lemma: word.lemma, ipa: word.ipa, gloss: seg.gloss, bookTitle: book.title });
+    const saved = store.toggleSaved(key, reviewMeta(book, chapter.id, p, index, seg));
     saveBtn.setAttribute('aria-pressed', String(saved));
     saveBtn.textContent = saved ? '★ 已收藏' : '☆ 收藏';
   });
@@ -293,8 +459,14 @@ function openWordCard({ book, paragraph, index, seg }) {
 
 /* ---------- Recall (answer sheet) ---------- */
 
+// What a review needs to show this word later: word-level fields only.
+function reviewMeta(book, chapterId, p, i, seg) {
+  const word = book.vocab.get(seg.w) ?? {};
+  return { lemma: word.lemma ?? seg.form, form: seg.form, gloss: seg.gloss, accept: seg.accept, ipa: word.ipa, bookTitle: book.title, chapter: chapterId, p, i };
+}
+
 function openAnswer(ctx, chip) {
-  const { book, paragraph, index, seg, occKey, mode } = ctx;
+  const { book, chapter, paragraph, p, index, seg, occKey, mode } = ctx;
   const key = wordKey(book, seg.w);
   const meaning = mode === 'en2zh';
   const input = h('input', {
@@ -306,7 +478,7 @@ function openAnswer(ctx, chip) {
   let pending = null;
 
   const finish = (correct) => {
-    store.recordAnswer(key, { mode, correct, given: pending.given });
+    store.recordAnswer(key, { mode, correct, given: pending.given }, reviewMeta(book, chapter.id, p, index, seg));
     sessionAnswers.set(`${mode}:${occKey}`, { correct });
     pending = null;
     answerDialog.close();
@@ -360,14 +532,14 @@ function openAnswer(ctx, chip) {
 function renderTransfer(book, chapter) {
   const forms = new Map();
   const gloss = new Map();
-  for (const p of chapter.paragraphs) {
-    for (const s of p.segments) {
-      if (typeof s === 'string') continue;
-      if (!forms.has(s.w)) forms.set(s.w, new Set());
-      forms.get(s.w).add(s.form);
-      if (!gloss.has(s.w)) gloss.set(s.w, s.gloss);
-    }
-  }
+  const first = new Map();
+  chapter.paragraphs.forEach((para, p) => para.segments.forEach((s, i) => {
+    if (typeof s === 'string') return;
+    if (!forms.has(s.w)) forms.set(s.w, new Set());
+    forms.get(s.w).add(s.form);
+    if (!gloss.has(s.w)) gloss.set(s.w, s.gloss);
+    if (!first.has(s.w)) first.set(s.w, { p, i, seg: s });
+  }));
   const items = [...forms].map(([id, f]) => {
     const word = book.vocab.get(id);
     const prompt = word && transferPrompt(word, [...f]);
@@ -390,7 +562,8 @@ function renderTransfer(book, chapter) {
       form.addEventListener('submit', (event) => {
         event.preventDefault();
         const correct = input.value.trim().toLowerCase() === prompt.answer.toLowerCase();
-        store.recordAnswer(wordKey(book, id), { mode: 'transfer', correct, given: input.value });
+        const at = first.get(id);
+        store.recordAnswer(wordKey(book, id), { mode: 'transfer', correct, given: input.value }, reviewMeta(book, chapter.id, at.p, at.i, at.seg));
         feedback.replaceChildren(correct
           ? h('span', { class: 'ok', text: '✓ 正确' })
           : h('span', { class: 'bad' }, '✗ 答案：', h('strong', { lang: 'en', text: prompt.answer })));
@@ -400,5 +573,6 @@ function renderTransfer(book, chapter) {
     })));
 }
 
+store.noteVisit();
 addEventListener('hashchange', render);
 render();
