@@ -1,0 +1,857 @@
+{
+  "about": "Delayed recall test items for the cliffword v0.1 pilot (docs/PILOT.md). All sentences were written for this test and appear neither in the story nor in vocab.json examples. Target lemmas come from content/huapi/vocab.json; control words appear nowhere in cliffword.",
+  "story": "huapi",
+  "items": [
+    {
+      "id": "scholar-n",
+      "group": "target",
+      "prompt": "书生；学者",
+      "accept": [
+        "书生",
+        "学者",
+        "读书人"
+      ],
+      "day1": {
+        "sentence": "The old ______ spent his whole life studying ancient poems.",
+        "answer": "scholar"
+      },
+      "day7": {
+        "sentence": "As a young ______, she read every book in the library.",
+        "answer": "scholar"
+      }
+    },
+    {
+      "id": "dawn-n",
+      "group": "target",
+      "prompt": "黎明；天刚亮",
+      "accept": [
+        "黎明",
+        "拂晓",
+        "破晓",
+        "天亮",
+        "天刚亮",
+        "清晨"
+      ],
+      "day1": {
+        "sentence": "The fishermen set out before ______, while the sky was still dark.",
+        "answer": "dawn"
+      },
+      "day7": {
+        "sentence": "We climbed the mountain to watch the sun rise at ______.",
+        "answer": "dawn"
+      }
+    },
+    {
+      "id": "stranger-n",
+      "group": "target",
+      "prompt": "陌生人",
+      "accept": [
+        "陌生人",
+        "生人"
+      ],
+      "day1": {
+        "sentence": "My grandmother never opened the door to a ______.",
+        "answer": "stranger"
+      },
+      "day7": {
+        "sentence": "On the train, a kind ______ helped me carry my bags.",
+        "answer": "stranger"
+      }
+    },
+    {
+      "id": "bundle-n",
+      "group": "target",
+      "prompt": "包袱；一捆",
+      "accept": [
+        "包袱",
+        "包",
+        "一包",
+        "捆",
+        "一捆"
+      ],
+      "day1": {
+        "sentence": "She tied her clothes into a small ______ and left the house.",
+        "answer": "bundle"
+      },
+      "day7": {
+        "sentence": "The teacher handed me a ______ of exam papers to mark.",
+        "answer": "bundle"
+      }
+    },
+    {
+      "id": "flee-v",
+      "group": "target",
+      "prompt": "逃跑；逃离",
+      "accept": [
+        "逃",
+        "逃跑",
+        "逃离",
+        "逃走"
+      ],
+      "day1": {
+        "sentence": "When the fire alarm rang, everyone tried to ______ the building.",
+        "answer": "flee"
+      },
+      "day7": {
+        "sentence": "Many families ______ the city when the war began.",
+        "answer": "fled"
+      }
+    },
+    {
+      "id": "shelter-n",
+      "group": "target",
+      "prompt": "容身之处；避难所",
+      "accept": [
+        "容身之处",
+        "栖身之处",
+        "避难所",
+        "庇护所",
+        "庇护",
+        "住处"
+      ],
+      "day1": {
+        "sentence": "During the storm, we found ______ under a bridge.",
+        "answer": "shelter"
+      },
+      "day7": {
+        "sentence": "The city opened a new ______ for people who had lost their homes.",
+        "answer": "shelter"
+      }
+    },
+    {
+      "id": "conceal-v",
+      "group": "target",
+      "prompt": "藏；隐藏",
+      "accept": [
+        "藏",
+        "隐藏",
+        "隐瞒",
+        "掩盖",
+        "掩饰"
+      ],
+      "day1": {
+        "sentence": "He tried to ______ the letter under his pillow.",
+        "answer": "conceal"
+      },
+      "day7": {
+        "sentence": "She could not ______ her excitement when she heard the news.",
+        "answer": "conceal"
+      }
+    },
+    {
+      "id": "suspicious-adj",
+      "group": "target",
+      "prompt": "可疑的；起疑的",
+      "accept": [
+        "可疑",
+        "可疑的",
+        "怀疑",
+        "起疑",
+        "怀疑的"
+      ],
+      "day1": {
+        "sentence": "The guard became ______ when the man refused to open his bag.",
+        "answer": "suspicious"
+      },
+      "day7": {
+        "sentence": "Please report any ______ emails to the IT team.",
+        "answer": "suspicious"
+      }
+    },
+    {
+      "id": "mysterious-adj",
+      "group": "target",
+      "prompt": "神秘的",
+      "accept": [
+        "神秘",
+        "神秘的",
+        "不可思议"
+      ],
+      "day1": {
+        "sentence": "A ______ package arrived with no name on it.",
+        "answer": "mysterious"
+      },
+      "day7": {
+        "sentence": "Scientists are still studying the ______ signals from deep space.",
+        "answer": "mysterious"
+      }
+    },
+    {
+      "id": "evil-n",
+      "group": "target",
+      "prompt": "邪恶；邪气",
+      "accept": [
+        "邪恶",
+        "邪气",
+        "邪物",
+        "恶",
+        "罪恶"
+      ],
+      "day1": {
+        "sentence": "In many old stories, a hero must fight against ______.",
+        "answer": "evil"
+      },
+      "day7": {
+        "sentence": "The villagers believed the cave was full of ______.",
+        "answer": "evil"
+      }
+    },
+    {
+      "id": "warn-v",
+      "group": "target",
+      "prompt": "警告；提醒",
+      "accept": [
+        "警告",
+        "提醒",
+        "告诫"
+      ],
+      "day1": {
+        "sentence": "Doctors ______ that too much sugar can damage your teeth.",
+        "answer": "warn"
+      },
+      "day7": {
+        "sentence": "Nobody ______ us that the road was closed.",
+        "answer": "warned"
+      }
+    },
+    {
+      "id": "temptation-n",
+      "group": "target",
+      "prompt": "诱惑",
+      "accept": [
+        "诱惑",
+        "引诱"
+      ],
+      "day1": {
+        "sentence": "With so many cakes on the table, the ______ was too strong.",
+        "answer": "temptation"
+      },
+      "day7": {
+        "sentence": "Students face the ______ to play games instead of studying.",
+        "answer": "temptation"
+      }
+    },
+    {
+      "id": "ignore-v",
+      "group": "target",
+      "prompt": "不理会；忽视",
+      "accept": [
+        "不理会",
+        "不理",
+        "忽视",
+        "忽略",
+        "无视"
+      ],
+      "day1": {
+        "sentence": "If you ______ a small problem, it may become a big one.",
+        "answer": "ignore"
+      },
+      "day7": {
+        "sentence": "She ______ my message and kept talking on the phone.",
+        "answer": "ignored"
+      }
+    },
+    {
+      "id": "peek-v",
+      "group": "target",
+      "prompt": "偷看",
+      "accept": [
+        "偷看",
+        "偷偷看",
+        "窥视",
+        "瞥"
+      ],
+      "day1": {
+        "sentence": "Close your eyes and don't ______ until I say so.",
+        "answer": "peek"
+      },
+      "day7": {
+        "sentence": "The child ______ through the curtains to see who was outside.",
+        "answer": "peeked"
+      }
+    },
+    {
+      "id": "monster-n",
+      "group": "target",
+      "prompt": "怪物；恶鬼",
+      "accept": [
+        "怪物",
+        "恶鬼",
+        "妖怪",
+        "怪兽",
+        "魔鬼"
+      ],
+      "day1": {
+        "sentence": "The children were afraid of the ______ in the film.",
+        "answer": "monster"
+      },
+      "day7": {
+        "sentence": "In the legend, a ______ lived at the bottom of the lake.",
+        "answer": "monster"
+      }
+    },
+    {
+      "id": "brush-n",
+      "group": "target",
+      "prompt": "笔；刷子",
+      "accept": [
+        "笔",
+        "毛笔",
+        "画笔",
+        "刷子"
+      ],
+      "day1": {
+        "sentence": "The artist dipped her ______ into the red paint.",
+        "answer": "brush"
+      },
+      "day7": {
+        "sentence": "Chinese calligraphy is written with a soft ______.",
+        "answer": "brush"
+      }
+    },
+    {
+      "id": "disguise-n",
+      "group": "target",
+      "prompt": "伪装",
+      "accept": [
+        "伪装",
+        "假扮",
+        "乔装"
+      ],
+      "day1": {
+        "sentence": "The thief wore a police uniform as a ______.",
+        "answer": "disguise"
+      },
+      "day7": {
+        "sentence": "Nobody recognised the king in his simple ______.",
+        "answer": "disguise"
+      }
+    },
+    {
+      "id": "tremble-v",
+      "group": "target",
+      "prompt": "发抖",
+      "accept": [
+        "发抖",
+        "颤抖",
+        "哆嗦"
+      ],
+      "day1": {
+        "sentence": "His voice began to ______ when he gave the speech.",
+        "answer": "tremble"
+      },
+      "day7": {
+        "sentence": "The ground ______ as the train passed by.",
+        "answer": "trembled"
+      }
+    },
+    {
+      "id": "regret-n",
+      "group": "target",
+      "prompt": "后悔；悔恨",
+      "accept": [
+        "后悔",
+        "悔恨",
+        "懊悔",
+        "遗憾"
+      ],
+      "day1": {
+        "sentence": "She felt deep ______ about the words she had said.",
+        "answer": "regret"
+      },
+      "day7": {
+        "sentence": "To his ______, he never thanked his old teacher.",
+        "answer": "regret"
+      }
+    },
+    {
+      "id": "deceive-v",
+      "group": "target",
+      "prompt": "欺骗",
+      "accept": [
+        "欺骗",
+        "骗",
+        "蒙骗"
+      ],
+      "day1": {
+        "sentence": "Don't let his friendly smile ______ you.",
+        "answer": "deceive"
+      },
+      "day7": {
+        "sentence": "He ______ his parents about where he had been.",
+        "answer": "deceived"
+      }
+    },
+    {
+      "id": "hesitate-v",
+      "group": "target",
+      "prompt": "犹豫",
+      "accept": [
+        "犹豫",
+        "迟疑"
+      ],
+      "day1": {
+        "sentence": "She ______ before jumping into the cold water.",
+        "answer": "hesitated"
+      },
+      "day7": {
+        "sentence": "He ______ for a moment, then signed the contract.",
+        "answer": "hesitated"
+      }
+    },
+    {
+      "id": "fierce-adj",
+      "group": "target",
+      "prompt": "凶狠的；激烈的",
+      "accept": [
+        "凶狠",
+        "凶猛",
+        "狰狞",
+        "激烈",
+        "猛烈",
+        "凶狠的"
+      ],
+      "day1": {
+        "sentence": "The dog gave a ______ bark at the postman.",
+        "answer": "fierce"
+      },
+      "day7": {
+        "sentence": "There was ______ debate about the new law.",
+        "answer": "fierce"
+      }
+    },
+    {
+      "id": "tear-v",
+      "group": "target",
+      "prompt": "撕",
+      "accept": [
+        "撕",
+        "撕开",
+        "撕破",
+        "扯"
+      ],
+      "day1": {
+        "sentence": "Please don't ______ pages out of library books.",
+        "answer": "tear"
+      },
+      "day7": {
+        "sentence": "She ______ the letter into pieces and threw it away.",
+        "answer": "tore"
+      }
+    },
+    {
+      "id": "vanish-v",
+      "group": "target",
+      "prompt": "消失",
+      "accept": [
+        "消失",
+        "不见",
+        "消逝"
+      ],
+      "day1": {
+        "sentence": "The magician made the coin ______ in front of us.",
+        "answer": "vanish"
+      },
+      "day7": {
+        "sentence": "By morning, the snow had ______ completely.",
+        "answer": "vanished"
+      }
+    },
+    {
+      "id": "corpse-n",
+      "group": "target",
+      "prompt": "尸体",
+      "accept": [
+        "尸体",
+        "遗体",
+        "死尸"
+      ],
+      "day1": {
+        "sentence": "The police found a ______ in the river.",
+        "answer": "corpse"
+      },
+      "day7": {
+        "sentence": "In the story, the ______ suddenly opened its eyes.",
+        "answer": "corpse"
+      }
+    },
+    {
+      "id": "grief-n",
+      "group": "target",
+      "prompt": "悲痛",
+      "accept": [
+        "悲痛",
+        "悲伤",
+        "哀伤",
+        "伤心"
+      ],
+      "day1": {
+        "sentence": "After her father died, she was full of ______.",
+        "answer": "grief"
+      },
+      "day7": {
+        "sentence": "People showed their ______ by leaving flowers at the gate.",
+        "answer": "grief"
+      }
+    },
+    {
+      "id": "desperate-adj",
+      "group": "target",
+      "prompt": "绝望的；走投无路的",
+      "accept": [
+        "绝望",
+        "走投无路",
+        "拼命",
+        "不顾一切",
+        "极度渴望"
+      ],
+      "day1": {
+        "sentence": "The ______ swimmer waved his arms for help.",
+        "answer": "desperate"
+      },
+      "day7": {
+        "sentence": "After losing her job, she was ______ to find any work.",
+        "answer": "desperate"
+      }
+    },
+    {
+      "id": "sword-n",
+      "group": "target",
+      "prompt": "剑",
+      "accept": [
+        "剑",
+        "宝剑",
+        "刀剑"
+      ],
+      "day1": {
+        "sentence": "The knight pulled out his ______ and stepped forward.",
+        "answer": "sword"
+      },
+      "day7": {
+        "sentence": "He practises with a wooden ______ every morning.",
+        "answer": "sword"
+      }
+    },
+    {
+      "id": "capture-v",
+      "group": "target",
+      "prompt": "捉住；收服",
+      "accept": [
+        "捉住",
+        "抓住",
+        "捕获",
+        "俘获",
+        "收",
+        "收服"
+      ],
+      "day1": {
+        "sentence": "The soldiers tried to ______ the enemy's leader.",
+        "answer": "capture"
+      },
+      "day7": {
+        "sentence": "The rare bird was ______ on camera by a student.",
+        "answer": "captured"
+      }
+    },
+    {
+      "id": "beg-v",
+      "group": "target",
+      "prompt": "哀求；乞求",
+      "accept": [
+        "哀求",
+        "乞求",
+        "恳求",
+        "求",
+        "乞讨"
+      ],
+      "day1": {
+        "sentence": "The prisoner ______ the king for mercy.",
+        "answer": "begged"
+      },
+      "day7": {
+        "sentence": "I ______ you, please don't tell anyone.",
+        "answer": "beg"
+      }
+    },
+    {
+      "id": "revive-v",
+      "group": "target",
+      "prompt": "救活；使恢复",
+      "accept": [
+        "救活",
+        "复活",
+        "使苏醒",
+        "苏醒",
+        "复苏",
+        "恢复",
+        "振兴"
+      ],
+      "day1": {
+        "sentence": "The doctors worked for an hour to ______ the drowning boy.",
+        "answer": "revive"
+      },
+      "day7": {
+        "sentence": "A cup of strong tea ______ me after the long journey.",
+        "answer": "revived"
+      }
+    },
+    {
+      "id": "humiliate-v",
+      "group": "target",
+      "prompt": "羞辱",
+      "accept": [
+        "羞辱",
+        "侮辱",
+        "使丢脸",
+        "使蒙羞"
+      ],
+      "day1": {
+        "sentence": "He felt ______ when everyone laughed at his mistake.",
+        "answer": "humiliated"
+      },
+      "day7": {
+        "sentence": "The bully tried to ______ him by hiding his shoes.",
+        "answer": "humiliate"
+      }
+    },
+    {
+      "id": "sacrifice-n",
+      "group": "target",
+      "prompt": "牺牲",
+      "accept": [
+        "牺牲",
+        "献出",
+        "舍弃",
+        "付出"
+      ],
+      "day1": {
+        "sentence": "Her parents made a great ______ to send her to university.",
+        "answer": "sacrifice"
+      },
+      "day7": {
+        "sentence": "Soldiers who died in the war are remembered for their ______.",
+        "answer": "sacrifice"
+      }
+    },
+    {
+      "id": "reluctant-adj",
+      "group": "control",
+      "lemma": "reluctant",
+      "pos": "adj.",
+      "ipa": "/rɪˈlʌktənt/",
+      "prompt": "不情愿的",
+      "accept": [
+        "不情愿",
+        "不情愿的",
+        "勉强",
+        "不愿意"
+      ],
+      "day1": {
+        "sentence": "He was ______ to lend me his new car.",
+        "answer": "reluctant"
+      },
+      "day7": {
+        "sentence": "The shy girl was ______ to speak in class.",
+        "answer": "reluctant"
+      }
+    },
+    {
+      "id": "abandon-v",
+      "group": "control",
+      "lemma": "abandon",
+      "pos": "v.",
+      "ipa": "/əˈbændən/",
+      "prompt": "放弃；抛弃",
+      "accept": [
+        "放弃",
+        "抛弃",
+        "遗弃",
+        "丢弃"
+      ],
+      "day1": {
+        "sentence": "They had to ______ the car in the snow.",
+        "answer": "abandon"
+      },
+      "day7": {
+        "sentence": "Never ______ your dreams because of one failure.",
+        "answer": "abandon"
+      }
+    },
+    {
+      "id": "fragile-adj",
+      "group": "control",
+      "lemma": "fragile",
+      "pos": "adj.",
+      "ipa": "/ˈfrædʒaɪl/",
+      "prompt": "易碎的；脆弱的",
+      "accept": [
+        "易碎",
+        "易碎的",
+        "脆弱",
+        "脆弱的"
+      ],
+      "day1": {
+        "sentence": "Be careful with that box; the glasses inside are ______.",
+        "answer": "fragile"
+      },
+      "day7": {
+        "sentence": "After the illness, his health was still ______.",
+        "answer": "fragile"
+      }
+    },
+    {
+      "id": "inevitable-adj",
+      "group": "control",
+      "lemma": "inevitable",
+      "pos": "adj.",
+      "ipa": "/ɪnˈevɪtəbl/",
+      "prompt": "不可避免的",
+      "accept": [
+        "不可避免",
+        "不可避免的",
+        "必然",
+        "难免"
+      ],
+      "day1": {
+        "sentence": "With so much rain, a flood seemed ______.",
+        "answer": "inevitable"
+      },
+      "day7": {
+        "sentence": "Some mistakes are ______ when you learn a new language.",
+        "answer": "inevitable"
+      }
+    },
+    {
+      "id": "negotiate-v",
+      "group": "control",
+      "lemma": "negotiate",
+      "pos": "v.",
+      "ipa": "/nɪˈɡəʊʃieɪt/",
+      "prompt": "谈判；协商",
+      "accept": [
+        "谈判",
+        "协商",
+        "商议",
+        "商定"
+      ],
+      "day1": {
+        "sentence": "The two companies met to ______ a new contract.",
+        "answer": "negotiate"
+      },
+      "day7": {
+        "sentence": "She managed to ______ a lower rent for the flat.",
+        "answer": "negotiate"
+      }
+    },
+    {
+      "id": "compensate-v",
+      "group": "control",
+      "lemma": "compensate",
+      "pos": "v.",
+      "ipa": "/ˈkɒmpenseɪt/",
+      "prompt": "补偿；弥补",
+      "accept": [
+        "补偿",
+        "弥补",
+        "赔偿"
+      ],
+      "day1": {
+        "sentence": "The airline will ______ passengers for the delay.",
+        "answer": "compensate"
+      },
+      "day7": {
+        "sentence": "He works hard to ______ for his lack of experience.",
+        "answer": "compensate"
+      }
+    },
+    {
+      "id": "scarce-adj",
+      "group": "control",
+      "lemma": "scarce",
+      "pos": "adj.",
+      "ipa": "/skeəs/",
+      "prompt": "稀少的；缺乏的",
+      "accept": [
+        "稀少",
+        "稀少的",
+        "缺乏",
+        "稀缺",
+        "不足"
+      ],
+      "day1": {
+        "sentence": "Fresh water is ______ in the desert.",
+        "answer": "scarce"
+      },
+      "day7": {
+        "sentence": "During the war, food was ______ and expensive.",
+        "answer": "scarce"
+      }
+    },
+    {
+      "id": "vivid-adj",
+      "group": "control",
+      "lemma": "vivid",
+      "pos": "adj.",
+      "ipa": "/ˈvɪvɪd/",
+      "prompt": "生动的；鲜艳的",
+      "accept": [
+        "生动",
+        "生动的",
+        "鲜艳",
+        "鲜明",
+        "清晰"
+      ],
+      "day1": {
+        "sentence": "She has a ______ memory of her first day at school.",
+        "answer": "vivid"
+      },
+      "day7": {
+        "sentence": "The painting is full of ______ colours.",
+        "answer": "vivid"
+      }
+    },
+    {
+      "id": "persist-v",
+      "group": "control",
+      "lemma": "persist",
+      "pos": "v.",
+      "ipa": "/pəˈsɪst/",
+      "prompt": "持续；坚持",
+      "accept": [
+        "持续",
+        "坚持",
+        "继续存在",
+        "存留"
+      ],
+      "day1": {
+        "sentence": "If the pain ______, please see a doctor.",
+        "answer": "persists"
+      },
+      "day7": {
+        "sentence": "He will ______ until he finds the answer.",
+        "answer": "persist"
+      }
+    },
+    {
+      "id": "distort-v",
+      "group": "control",
+      "lemma": "distort",
+      "pos": "v.",
+      "ipa": "/dɪˈstɔːt/",
+      "prompt": "歪曲；扭曲",
+      "accept": [
+        "歪曲",
+        "扭曲",
+        "曲解"
+      ],
+      "day1": {
+        "sentence": "The newspaper tried to ______ the facts.",
+        "answer": "distort"
+      },
+      "day7": {
+        "sentence": "The old mirror ______ her face.",
+        "answer": "distorted"
+      }
+    }
+  ]
+}
