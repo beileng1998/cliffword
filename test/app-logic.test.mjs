@@ -1,0 +1,72 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { checkMeaning, checkSpelling, transferPrompt, hintFor } from '../app/check.js';
+import { createStore } from '../app/store.js';
+
+const seg = { w: 'suspect-v', form: 'suspected', gloss: '怀疑', accept: ['怀疑', '猜想'] };
+const word = { id: 'suspect-v', lemma: 'suspect', example: 'I suspected that something was wrong.' };
+
+test('meaning recall accepts the gloss and accept list, ignoring spaces and punctuation', () => {
+  assert.equal(checkMeaning(' 怀疑。', seg), true);
+  assert.equal(checkMeaning('猜想', seg), true);
+  assert.equal(checkMeaning('相信', seg), false);
+  assert.equal(checkMeaning('', seg), false);
+});
+
+test('meaning recall falls back to the gloss when accept is absent', () => {
+  assert.equal(checkMeaning('证据', { gloss: '证据' }), true);
+});
+
+test('spelling recall wants the form as written, case-insensitive', () => {
+  assert.equal(checkSpelling('Suspected ', seg), true);
+  assert.equal(checkSpelling('suspect', seg), false);
+});
+
+test('hint shows the first letter and the length', () => {
+  assert.equal(hintFor('suspected'), 's________');
+  assert.equal(hintFor("o'clock"), "o'_____");
+});
+
+test('transfer blanks the word in the English example', () => {
+  const p = transferPrompt(word, ['suspected']);
+  assert.equal(p.before, 'I ');
+  assert.equal(p.answer, 'suspected');
+  assert.equal(p.after, ' that something was wrong.');
+});
+
+test('transfer returns null when the example lacks the word', () => {
+  assert.equal(transferPrompt({ lemma: 'grief', example: 'No match here.' }, []), null);
+});
+
+function memoryStorage() {
+  const map = new Map();
+  return { getItem: (k) => map.get(k) ?? null, setItem: (k, v) => map.set(k, String(v)), removeItem: (k) => map.delete(k) };
+}
+
+test('store saves words, answers, errors and position, and survives a reload', () => {
+  const storage = memoryStorage();
+  const a = createStore(storage, () => 1000);
+  a.toggleSaved('builtin/huapi/scholar-n');
+  a.setPosition('builtin/huapi', { chapter: '02', paragraph: 3 });
+  a.recordAnswer('builtin/huapi/scholar-n', { mode: 'en2zh', correct: false, given: '学者' });
+  a.recordAnswer('builtin/huapi/scholar-n', { mode: 'en2zh', correct: true, given: '书生' });
+  a.noteNextChapter('builtin/huapi');
+
+  const b = createStore(storage, () => 2000);
+  assert.equal(b.isSaved('builtin/huapi/scholar-n'), true);
+  assert.deepEqual(b.position('builtin/huapi'), { chapter: '02', paragraph: 3 });
+  assert.equal(b.errors()['builtin/huapi/scholar-n'].count, 1);
+  assert.equal(b.answers('builtin/huapi/scholar-n').length, 2);
+  assert.equal(b.data.stats.nextChapter['builtin/huapi'], 1);
+
+  b.toggleSaved('builtin/huapi/scholar-n');
+  assert.equal(createStore(storage).isSaved('builtin/huapi/scholar-n'), false);
+});
+
+test('store works in memory when storage throws', () => {
+  const broken = { getItem() { throw new Error('blocked'); }, setItem() { throw new Error('blocked'); } };
+  const s = createStore(broken);
+  s.toggleSaved('x');
+  assert.equal(s.isSaved('x'), true);
+  assert.equal(s.persistent, false);
+});

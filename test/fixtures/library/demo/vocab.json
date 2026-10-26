@@ -1,0 +1,4 @@
+{ "words": [
+  { "id": "letter-n", "lemma": "letter", "ipa": "/ˈletə/", "pos": "n.", "example": "She wrote a long letter to her grandmother." },
+  { "id": "trust-v", "lemma": "trust", "ipa": "/trʌst/", "pos": "v.", "example": "I trust him to keep his promise." }
+] }

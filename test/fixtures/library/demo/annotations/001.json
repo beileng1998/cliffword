@@ -1,0 +1,32 @@
+{
+  "occurrences": [
+    {
+      "w": "letter-n",
+      "anchor": "信",
+      "nth": 1,
+      "form": "letter",
+      "gloss": "信"
+    },
+    {
+      "w": "letter-n",
+      "anchor": "信",
+      "nth": 4,
+      "form": "letter",
+      "gloss": "信"
+    },
+    {
+      "w": "trust-v",
+      "anchor": "相信",
+      "nth": 1,
+      "form": "trust",
+      "gloss": "相信"
+    },
+    {
+      "w": "trust-v",
+      "anchor": "相信",
+      "nth": 2,
+      "form": "trust",
+      "gloss": "相信"
+    }
+  ]
+}

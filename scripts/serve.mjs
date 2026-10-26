@@ -2,10 +2,12 @@
 // Usage: node scripts/serve.mjs [port]
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { extname, join, normalize, sep } from 'node:path';
+import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
+// LIBRARY_DIR serves another folder at /library/ (used by the browser tests).
+const libraryRoot = process.env.LIBRARY_DIR ? resolve(process.env.LIBRARY_DIR) + sep : null;
 const port = Number(process.argv[2] ?? process.env.PORT ?? 4173);
 const types = {
   '.html': 'text/html; charset=utf-8',
@@ -14,12 +16,15 @@ const types = {
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
+  '.txt': 'text/plain; charset=utf-8',
 };
 
 createServer(async (req, res) => {
   const path = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-  const file = normalize(join(root, path.endsWith('/') ? `${path}index.html` : path));
-  if (!file.startsWith(root) || file.split(sep).includes('node_modules') || file.split(sep).includes('.git')) {
+  const rel = path.endsWith('/') ? `${path}index.html` : path;
+  const base = libraryRoot && rel.startsWith('/library/') ? libraryRoot : root;
+  const file = normalize(join(base, base === libraryRoot ? rel.slice('/library/'.length) : rel));
+  if (!file.startsWith(base) || file.split(sep).includes('node_modules') || file.split(sep).includes('.git')) {
     res.writeHead(403).end();
     return;
   }

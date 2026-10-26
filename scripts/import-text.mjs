@@ -1,7 +1,7 @@
 // Splits a local text file you already have into chapters under library/<id>/.
 // The text is copied as-is; nothing is fetched, and library/ is gitignored.
 // Usage: npm run import -- <file.txt> [--id my-book] [--title 书名] [--force]
-import { readFile, writeFile, mkdir, rm, access } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, rm, access, readdir } from 'node:fs/promises';
 import { basename, extname, join, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
@@ -95,7 +95,21 @@ export async function importText(file, { id, title, libraryDir = DEFAULT_LIBRARY
     chapters: entries,
   };
   await writeFile(join(bookDir, 'book.json'), `${JSON.stringify(book, null, 2)}\n`);
+  await updateLibraryIndex(libraryDir);
   return { bookDir, book };
+}
+
+// The reader is served statically and can't list folders, so keep an index.
+export async function updateLibraryIndex(libraryDir = DEFAULT_LIBRARY) {
+  const books = [];
+  for (const entry of await readdir(libraryDir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const book = await readFile(join(libraryDir, entry.name, 'book.json'), 'utf8').then(JSON.parse, () => null);
+    if (book) books.push({ id: book.id, title: book.title, chapters: book.chapters.length });
+  }
+  books.sort((a, b) => a.id.localeCompare(b.id));
+  await writeFile(join(libraryDir, 'index.json'), `${JSON.stringify({ books }, null, 2)}\n`);
+  return books;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
