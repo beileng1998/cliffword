@@ -1,0 +1,66 @@
+# cliffword
+
+**读一个停不下来的中文故事，顺手记住里面的英文单词。**
+Original serialized Chinese stories with English target words woven in, plus recall exercises and next-day review. A static web app: no accounts, no backend, no AI at runtime.
+
+> **Status: pre-alpha.** The content format and validator exist. The reader and the first story don't yet. See [docs/SCOPE.md](docs/SCOPE.md) for what v0.1 will do and the check that proves it.
+
+## Why
+
+Word lists are easy to quit. A cliffhanger isn't. cliffword tests whether wanting to read the next chapter can be turned into English vocabulary that you still know the next day, and that works outside the story.
+
+How it differs from similar tools:
+
+- [JiaduReader 夹读](https://github.com/qqw666666qqw/mixreader) runs a dictionary over any Chinese book you upload and swaps in English words. cliffword ships stories written for the purpose and reviewed by a person. Every English word is tagged where it appears, with its meaning *in that sentence*, and then practised in both directions and in new English sentences.
+- [Lute](https://github.com/LuteOrg/lute-v3) works the other way round: you read a full English text and look up the words you don't know.
+
+## How content looks
+
+A chapter paragraph is a list of plain Chinese text and tagged words:
+
+```json
+{
+  "segments": [
+    "警察在门把手上找到了新的",
+    { "w": "evidence-n", "form": "evidence", "gloss": "证据" },
+    "。"
+  ]
+}
+```
+
+The word itself lives once in `vocab.json`, with its pronunciation, part of speech and an English example sentence:
+
+```json
+{ "id": "evidence-n", "lemma": "evidence", "ipa": "/ˈevɪdəns/", "pos": "n.",
+  "example": "There is no evidence that he was ever there." }
+```
+
+The format is documented in [docs/CONTENT.md](docs/CONTENT.md).
+
+## Develop
+
+Requires Node 20 or later.
+
+```bash
+npm install
+```
+
+```bash
+npm test
+```
+
+`npm test` runs the content validator's unit tests and checks every story in `content/`. It fails until the first story is added; that failure is the v0.1 acceptance check.
+
+```bash
+npm run test:e2e
+```
+
+That runs the browser tests at phone and desktop sizes. Run `npx playwright install chromium` once first.
+
+## License
+
+Code: [MIT](LICENSE). Stories and word data in `content/`: [CC-BY-4.0](LICENSE-CONTENT).
+
+## Support
+
+A hobby project, maintained on a best-effort basis with no SLA.
