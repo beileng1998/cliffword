@@ -92,6 +92,8 @@ Your own agent then runs the `cliffword-annotate` skill, which writes two kinds 
 ] }
 ```
 
+An occurrence can also carry `glossNote`: a short reason the gloss differs from the dictionary's meanings in this sentence.
+
 `anchor` must be an exact substring of that chapter's source text. `nth` (default 1) counts occurrences of the anchor across the whole chapter. The source text is never rewritten. Chapters are assembled in memory when they're validated or read.
 
 `npm run validate:library` checks imported books with the same rules as built-in stories, with three changes:
@@ -100,3 +102,14 @@ Your own agent then runs the `cliffword-annotate` skill, which writes two kinds 
 - each chapter must use `density.min`–`density.max` distinct target words.
 
 It also reports anchors that aren't found or that overlap, and chapters that aren't annotated yet.
+
+For books at `level: "IELTS"` (the default), it also checks against `data/ielts.json`, the IELTS-tagged words from ECDICT:
+- every vocab `lemma` must be on the list;
+- every `form` must be the lemma or one of its listed forms;
+- every `gloss` must agree with one of the dictionary's Chinese meanings for that word, unless it has a `glossNote`.
+
+To look words up yourself:
+- `npm run words -- lookup <word>` shows a word's pronunciation, meanings and forms;
+- `npm run words -- suggest <book> <chapter>` lists candidate words for a chapter.
+
+To rebuild the list from a newer ECDICT, run `node scripts/build-wordlist.mjs <ecdict.csv> <commit>`.

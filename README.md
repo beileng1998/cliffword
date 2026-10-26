@@ -39,13 +39,18 @@ The format is documented in [docs/CONTENT.md](docs/CONTENT.md).
 
 ## Read your own books
 
-You can annotate a book you already have as a local `.txt` file, using your own Codex or Claude Code. It stays on your machine: `library/` is gitignored, and nothing is downloaded or uploaded.
+Give your own Codex or Claude Code a book you have as a local `.txt` file, and it does the rest. Open the agent in this repo and say, for example:
 
-```bash
-npm run import -- ~/books/my-book.txt --id my-book
-```
+> 用 cliffword-annotate 把这本书做成 cliffword：~/books/my-book.txt
 
-Then, in Codex or Claude Code opened in this repo, ask: *"Use cliffword-annotate on my-book."* The skill picks IELTS-level words (8–15 per chapter by default) and writes only small annotation files next to your text. It then runs `npm run validate:library` until the book is clean. Only import texts you have the right to use.
+Using the `cliffword-annotate` skill, the agent then:
+1. imports the file into `library/`;
+2. picks 8–15 IELTS words per chapter from the bundled word list;
+3. writes small annotation files next to your untouched text;
+4. checks every word, form and Chinese meaning against the dictionary until the book passes;
+5. tells you to run `npm run serve` and open it under 我的书库.
+
+Your book stays on your machine: `library/` is gitignored, and nothing is downloaded or uploaded. Only import texts you have the right to use.
 
 ## Develop
 
@@ -69,7 +74,7 @@ That runs the browser tests at phone and desktop sizes. Run `npx playwright inst
 
 ## License
 
-Code: [MIT](LICENSE). Stories and word data in `content/`: [CC-BY-4.0](LICENSE-CONTENT).
+Code: [MIT](LICENSE). Stories and word data in `content/`: [CC-BY-4.0](LICENSE-CONTENT). `data/ielts.json` is derived from [ECDICT](https://github.com/skywind3000/ECDICT) under the MIT license ([data/ECDICT-LICENSE](data/ECDICT-LICENSE)).
 
 ## Support
 

@@ -45,6 +45,7 @@ export function applyAnnotations(paragraphTexts, occurrences = []) {
       if (start > pos) segments.push(text.slice(pos, start));
       const seg = { w: occ.w, form: occ.form, gloss: occ.gloss };
       if (occ.accept) seg.accept = occ.accept;
+      if (occ.glossNote) seg.glossNote = occ.glossNote;
       segments.push(seg);
       pos = end;
     }
