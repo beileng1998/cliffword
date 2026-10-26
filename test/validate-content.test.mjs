@@ -74,7 +74,7 @@ test('enforces the 30–50 target word range by default', async () => {
   assert.ok(hasError(validateStoryData(await validFixture()), /uses 2 target words, expected 30–50/));
 });
 
-// v0.1 acceptance: fails until the first original story lands in content/.
+// v0.1 acceptance: every built-in story must validate.
 test('every story in content/ passes the validator', async () => {
   const results = await validateAll(contentDir);
   assert.ok(results.length > 0, 'no stories found in content/');
