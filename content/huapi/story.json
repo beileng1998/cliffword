@@ -1,0 +1,12 @@
+{
+  "id": "huapi",
+  "title": "画皮",
+  "license": "CC-BY-4.0",
+  "source": "A new modern-Chinese retelling written for cliffword, based on the plot of 《画皮》 from 蒲松龄《聊斋志异》 (public domain).",
+  "level": "IELTS",
+  "chapters": [
+    "chapters/01.json",
+    "chapters/02.json",
+    "chapters/03.json"
+  ]
+}

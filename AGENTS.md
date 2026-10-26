@@ -2,7 +2,7 @@
 
 ## Commands
 
-- `npm test`: validator unit tests plus validation of all stories in `content/`. It is expected to fail while `content/` is empty.
+- `npm test`: validator unit tests plus validation of all stories in `content/`.
 - `npm run validate`: validate the stories only, printing every error.
 - `npm run test:e2e`: Playwright tests at 390×844 and 1280×800. It serves the repo root with `scripts/serve.mjs` on port 4173.
 

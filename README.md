@@ -1,9 +1,9 @@
 # cliffword
 
 **读一个停不下来的中文故事，顺手记住里面的英文单词。**
-Original serialized Chinese stories with English target words woven in, plus recall exercises and next-day review. A static web app: no accounts, no backend, no AI at runtime.
+Serialized Chinese stories with English target words woven in, plus recall exercises and next-day review. A static web app: no accounts, no backend, no AI at runtime.
 
-> **Status: pre-alpha.** The content format and validator exist. The reader and the first story don't yet. See [docs/SCOPE.md](docs/SCOPE.md) for what v0.1 will do and the check that proves it.
+> **Status: pre-alpha.** The content format, validator and first story (《画皮》, a retelling of the 聊斋志异 tale) exist. The reader doesn't yet. See [docs/SCOPE.md](docs/SCOPE.md) for what v0.1 will do and the check that proves it.
 
 ## Why
 
@@ -49,7 +49,7 @@ npm install
 npm test
 ```
 
-`npm test` runs the content validator's unit tests and checks every story in `content/`. It fails until the first story is added; that failure is the v0.1 acceptance check.
+`npm test` runs the content validator's unit tests and checks every story in `content/`.
 
 ```bash
 npm run test:e2e

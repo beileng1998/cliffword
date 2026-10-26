@@ -1,0 +1,235 @@
+{
+  "words": [
+    {
+      "id": "scholar-n",
+      "lemma": "scholar",
+      "ipa": "/ˈskɒlə/",
+      "pos": "n.",
+      "example": "She is a respected scholar of Chinese history."
+    },
+    {
+      "id": "dawn-n",
+      "lemma": "dawn",
+      "ipa": "/dɔːn/",
+      "pos": "n.",
+      "example": "We left the hotel at dawn to avoid the traffic."
+    },
+    {
+      "id": "stranger-n",
+      "lemma": "stranger",
+      "ipa": "/ˈstreɪndʒə/",
+      "pos": "n.",
+      "example": "A stranger stopped me to ask for directions."
+    },
+    {
+      "id": "bundle-n",
+      "lemma": "bundle",
+      "ipa": "/ˈbʌndl/",
+      "pos": "n.",
+      "example": "He carried a bundle of old letters under his arm."
+    },
+    {
+      "id": "flee-v",
+      "lemma": "flee",
+      "ipa": "/fliː/",
+      "pos": "v.",
+      "example": "Thousands of people had to flee the flood."
+    },
+    {
+      "id": "shelter-n",
+      "lemma": "shelter",
+      "ipa": "/ˈʃeltə/",
+      "pos": "n.",
+      "example": "The charity provides shelter for homeless families."
+    },
+    {
+      "id": "conceal-v",
+      "lemma": "conceal",
+      "ipa": "/kənˈsiːl/",
+      "pos": "v.",
+      "example": "She tried to conceal her disappointment."
+    },
+    {
+      "id": "suspicious-adj",
+      "lemma": "suspicious",
+      "ipa": "/səˈspɪʃəs/",
+      "pos": "adj.",
+      "example": "Call the police if you see anything suspicious."
+    },
+    {
+      "id": "mysterious-adj",
+      "lemma": "mysterious",
+      "ipa": "/mɪˈstɪəriəs/",
+      "pos": "adj.",
+      "example": "A mysterious illness spread through the village."
+    },
+    {
+      "id": "evil-n",
+      "lemma": "evil",
+      "ipa": "/ˈiːvl/",
+      "pos": "n.",
+      "example": "The film is a simple story of good against evil."
+    },
+    {
+      "id": "warn-v",
+      "lemma": "warn",
+      "ipa": "/wɔːn/",
+      "pos": "v.",
+      "example": "Experts warn that sea levels will continue to rise."
+    },
+    {
+      "id": "temptation-n",
+      "lemma": "temptation",
+      "ipa": "/tempˈteɪʃn/",
+      "pos": "n.",
+      "example": "It is hard to resist the temptation to check your phone."
+    },
+    {
+      "id": "ignore-v",
+      "lemma": "ignore",
+      "ipa": "/ɪɡˈnɔː/",
+      "pos": "v.",
+      "example": "You cannot ignore the problem forever."
+    },
+    {
+      "id": "peek-v",
+      "lemma": "peek",
+      "ipa": "/piːk/",
+      "pos": "v.",
+      "example": "She peeked at the last page of the novel."
+    },
+    {
+      "id": "monster-n",
+      "lemma": "monster",
+      "ipa": "/ˈmɒnstə/",
+      "pos": "n.",
+      "example": "The children drew a monster with three eyes."
+    },
+    {
+      "id": "brush-n",
+      "lemma": "brush",
+      "ipa": "/brʌʃ/",
+      "pos": "n.",
+      "example": "Clean the brush before the paint dries."
+    },
+    {
+      "id": "disguise-n",
+      "lemma": "disguise",
+      "ipa": "/dɪsˈɡaɪz/",
+      "pos": "n.",
+      "example": "He wore a hat and glasses as a disguise."
+    },
+    {
+      "id": "tremble-v",
+      "lemma": "tremble",
+      "ipa": "/ˈtrembl/",
+      "pos": "v.",
+      "example": "Her hands began to tremble as she opened the letter."
+    },
+    {
+      "id": "regret-n",
+      "lemma": "regret",
+      "ipa": "/rɪˈɡret/",
+      "pos": "n.",
+      "example": "My only regret is that I didn't start earlier."
+    },
+    {
+      "id": "deceive-v",
+      "lemma": "deceive",
+      "ipa": "/dɪˈsiːv/",
+      "pos": "v.",
+      "example": "The advertisement was designed to deceive customers."
+    },
+    {
+      "id": "hesitate-v",
+      "lemma": "hesitate",
+      "ipa": "/ˈhezɪteɪt/",
+      "pos": "v.",
+      "example": "Don't hesitate to contact me if you have any questions."
+    },
+    {
+      "id": "fierce-adj",
+      "lemma": "fierce",
+      "ipa": "/fɪəs/",
+      "pos": "adj.",
+      "example": "The two companies are in fierce competition."
+    },
+    {
+      "id": "tear-v",
+      "lemma": "tear",
+      "ipa": "/teə/",
+      "pos": "v.",
+      "example": "Be careful not to tear the paper."
+    },
+    {
+      "id": "vanish-v",
+      "lemma": "vanish",
+      "ipa": "/ˈvænɪʃ/",
+      "pos": "v.",
+      "example": "The plane seemed to vanish from the radar."
+    },
+    {
+      "id": "corpse-n",
+      "lemma": "corpse",
+      "ipa": "/kɔːps/",
+      "pos": "n.",
+      "example": "The detective examined the corpse for clues."
+    },
+    {
+      "id": "grief-n",
+      "lemma": "grief",
+      "ipa": "/ɡriːf/",
+      "pos": "n.",
+      "example": "Grief can affect both the mind and the body."
+    },
+    {
+      "id": "desperate-adj",
+      "lemma": "desperate",
+      "ipa": "/ˈdespərət/",
+      "pos": "adj.",
+      "example": "After weeks without work, he was desperate for money."
+    },
+    {
+      "id": "sword-n",
+      "lemma": "sword",
+      "ipa": "/sɔːd/",
+      "pos": "n.",
+      "example": "The museum displays a sword from the Ming dynasty."
+    },
+    {
+      "id": "capture-v",
+      "lemma": "capture",
+      "ipa": "/ˈkæptʃə/",
+      "pos": "v.",
+      "example": "Police managed to capture the suspect near the border."
+    },
+    {
+      "id": "beg-v",
+      "lemma": "beg",
+      "ipa": "/beɡ/",
+      "pos": "v.",
+      "example": "He had to beg his parents for a second chance."
+    },
+    {
+      "id": "revive-v",
+      "lemma": "revive",
+      "ipa": "/rɪˈvaɪv/",
+      "pos": "v.",
+      "example": "The government hopes to revive the local economy."
+    },
+    {
+      "id": "humiliate-v",
+      "lemma": "humiliate",
+      "ipa": "/hjuːˈmɪlieɪt/",
+      "pos": "v.",
+      "example": "The manager tried to humiliate him in front of his colleagues."
+    },
+    {
+      "id": "sacrifice-n",
+      "lemma": "sacrifice",
+      "ipa": "/ˈsækrɪfaɪs/",
+      "pos": "n.",
+      "example": "Success often requires personal sacrifice."
+    }
+  ]
+}

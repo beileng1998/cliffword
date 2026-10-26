@@ -9,14 +9,18 @@ content/<story-id>/
   chapters/01.json, 02.json, …
 ```
 
-All story text and word data is CC-BY-4.0 and must be original.
+All story text and word data is CC-BY-4.0. It must be original, or a new retelling of a public-domain source that `source` names.
 
 ## story.json
 
 ```json
-{ "id": "night-shift", "title": "夜班", "license": "CC-BY-4.0",
+{ "id": "huapi", "title": "画皮", "license": "CC-BY-4.0",
+  "source": "A new retelling based on 《画皮》 from 蒲松龄《聊斋志异》 (public domain).",
+  "level": "IELTS",
   "chapters": ["chapters/01.json", "chapters/02.json", "chapters/03.json"] }
 ```
+
+`source` (where the story comes from) and `level` (the exam level the target words are aimed at) are optional.
 
 ## vocab.json
 

@@ -25,7 +25,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # Includes the v0.1 acceptance check, which fails until content/ has a story.
+      # Includes the v0.1 acceptance check on content/.
       - run: npm test
 
   e2e:
