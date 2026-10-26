@@ -11,6 +11,8 @@
   "scripts": {
     "test": "node --test \"test/**/*.test.mjs\"",
     "validate": "node scripts/validate-content.mjs",
+    "validate:library": "node scripts/validate-content.mjs library --library",
+    "import": "node scripts/import-text.mjs",
     "serve": "node scripts/serve.mjs",
     "test:e2e": "playwright test"
   },

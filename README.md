@@ -37,6 +37,16 @@ The word itself lives once in `vocab.json`, with its pronunciation, part of spee
 
 The format is documented in [docs/CONTENT.md](docs/CONTENT.md).
 
+## Read your own books
+
+You can annotate a book you already have as a local `.txt` file, using your own Codex or Claude Code. It stays on your machine: `library/` is gitignored, and nothing is downloaded or uploaded.
+
+```bash
+npm run import -- ~/books/my-book.txt --id my-book
+```
+
+Then, in Codex or Claude Code opened in this repo, ask: *"Use cliffword-annotate on my-book."* The skill picks IELTS-level words (8–15 per chapter by default) and writes only small annotation files next to your text. It then runs `npm run validate:library` until the book is clean. Only import texts you have the right to use.
+
 ## Develop
 
 Requires Node 20 or later.
