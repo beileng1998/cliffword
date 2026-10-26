@@ -1,0 +1,6 @@
+{
+  "words": [
+    { "id": "evidence-n", "lemma": "evidence", "ipa": "/ˈevɪdəns/", "pos": "n.", "example": "There is no evidence that he was ever there." },
+    { "id": "suspect-v", "lemma": "suspect", "ipa": "/səˈspekt/", "pos": "v.", "example": "I suspected that something was wrong." }
+  ]
+}

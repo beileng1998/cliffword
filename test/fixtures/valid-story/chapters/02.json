@@ -1,0 +1,8 @@
+{
+  "id": "02",
+  "title": "灯",
+  "paragraphs": [
+    { "segments": ["第二份", { "w": "evidence-n", "form": "evidence", "gloss": "证据" }, "藏在灯罩里。", "她更加", { "w": "suspect-v", "form": "suspected", "gloss": "怀疑", "accept": ["怀疑", "猜想"] }, "了。"] },
+    { "segments": ["灯罩里还有一张写着她名字的纸条。"], "hook": true }
+  ]
+}

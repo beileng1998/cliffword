@@ -1,0 +1,6 @@
+{
+  "id": "valid-story",
+  "title": "测试故事",
+  "license": "CC-BY-4.0",
+  "chapters": ["chapters/01.json", "chapters/02.json"]
+}

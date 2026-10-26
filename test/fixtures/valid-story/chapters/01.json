@@ -1,0 +1,9 @@
+{
+  "id": "01",
+  "title": "门把手",
+  "paragraphs": [
+    { "segments": ["警察在门把手上找到了新的", { "w": "evidence-n", "form": "evidence", "gloss": "证据" }, "。"] },
+    { "segments": ["她开始", { "w": "suspect-v", "form": "suspect", "gloss": "怀疑" }, "邻居。"] },
+    { "segments": ["可是那天晚上，邻居家的灯一直没有亮。"], "hook": true }
+  ]
+}
